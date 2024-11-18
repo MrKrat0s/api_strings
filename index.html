@@ -49,7 +49,7 @@ button{margin: 5px;}
             }
         }
 
-        // Получение одного пользователя
+        // Получение одной строки
         async function getString(id) {
             const response = await fetch(`/api/string/${id}`, {
                 method: "GET",
@@ -65,7 +65,7 @@ button{margin: 5px;}
                 console.log(error.message); // и выводим его на консоль
             }
         }
-        // Добавление пользователя
+        // Добавление строки
         async function createString(palindrome) {
 
             const response = await fetch("api/string", {
@@ -84,13 +84,13 @@ button{margin: 5px;}
                 console.log(error.message);
             }
         }
-        // сброс данных формы после отправки
+        // Сброс данных формы после отправки
         function reset() {
             document.getElementById("userId").value =
             document.getElementById("userName").value =
             document.getElementById("userAge").value = "";
         }
-        // создание строки для таблицы
+        // Создание строки для таблицы
         function row(string) {
 
             const tr = document.createElement("tr");
@@ -106,12 +106,12 @@ button{margin: 5px;}
 
             return tr;
         }
-       // создание строки
+       // Создание строки
         document.getElementById("createBtn").addEventListener("click", async () => {
             const palindrome = document.getElementById("palindrome").checked;
             await createString(palindrome);
         });
-       // поиск строки
+       // Поиск строки
         document.getElementById("searchBtn").addEventListener("click", async () => {
             const string_id = document.getElementById("uuidText").value;
             await getString(string_id);
