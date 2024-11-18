@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>METANIT.COM</title>
+<style>
+td {padding:5px;}
+button{margin: 5px;}
+</style>
+</head>
+<body>
+    <h2>Cтроки</h2>
+    --------------------------------------------------------------
+    <div>
+        <p>
+            Полиндром: <input id="palindrome" type="checkbox"/>
+        </p>
+         <p>
+            <button id="createBtn">Создать</button>
+        </p>
+    </div>
+    --------------------------------------------------------------
+    <div>
+        <p>
+            UUID: <input id="uuidText" type="text"/> <button id="searchBtn">Искать</button>
+        </p>
+        <p>
+            Искомая строка: <input id="stringText" type="text" readonly>
+        </p>
+    </div>
+    --------------------------------------------------------------
+    <table>
+        <thead><tr><th>Строка</th><th>UUID</th><th></th></tr></thead>
+        <tbody>
+        </tbody>
+    </table>
+
+   <script>
+        async function getStrings() {
+            const response = await fetch("/api/strings", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const strings = await response.json();
+                const rows = document.querySelector("tbody");
+                // добавляем полученные элементы в таблицу
+                strings.forEach(string => rows.append(row(string)));
+            }
+        }
+
+        // Получение одного пользователя
+        async function getString(id) {
+            const response = await fetch(`/api/string/${id}`, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const string = await response.json();
+                document.getElementById("stringText").value = string.result;
+            }
+            else {
+                // если произошла ошибка, получаем сообщение об ошибке
+                const error = await response.json();
+                console.log(error.message); // и выводим его на консоль
+            }
+        }
+        // Добавление пользователя
+        async function createString(palindrome) {
+
+            const response = await fetch("api/string", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    palindrome: palindrome,
+                })
+            });
+            if (response.ok === true) {
+                const user = await response.json();
+                document.querySelector("tbody").append(row(user));
+            }
+            else {
+                const error = await response.json();
+                console.log(error.message);
+            }
+        }
+        // сброс данных формы после отправки
+        function reset() {
+            document.getElementById("userId").value =
+            document.getElementById("userName").value =
+            document.getElementById("userAge").value = "";
+        }
+        // создание строки для таблицы
+        function row(string) {
+
+            const tr = document.createElement("tr");
+            tr.setAttribute("data-rowid", string.id);
+
+            const stringTd = document.createElement("td");
+            stringTd.append(string.result);
+            tr.append(stringTd);
+
+            const idTd = document.createElement("td");
+            idTd.append(string.id);
+            tr.append(idTd);
+
+            return tr;
+        }
+       // создание строки
+        document.getElementById("createBtn").addEventListener("click", async () => {
+            const palindrome = document.getElementById("palindrome").checked;
+            await createString(palindrome);
+        });
+       // поиск строки
+        document.getElementById("searchBtn").addEventListener("click", async () => {
+            const string_id = document.getElementById("uuidText").value;
+            await getString(string_id);
+        });
+        reset();
+       </script>
+</body>
+</html>
