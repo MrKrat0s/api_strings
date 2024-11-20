@@ -38,7 +38,7 @@ button{margin: 5px;}
    <script>
        // Получение всех строк
         async function getStrings() {
-            const response = await fetch("/api/strings", {
+            const response = await fetch("/api/object/strings", {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
@@ -51,7 +51,7 @@ button{margin: 5px;}
 
         // Получение одной строки
         async function getString(id) {
-            const response = await fetch(`/api/string/${id}`, {
+            const response = await fetch(`/api/object/string/${id}`, {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
@@ -67,7 +67,7 @@ button{margin: 5px;}
         // Добавление строки
         async function createString(palindrome) {
 
-            const response = await fetch("api/string", {
+            const response = await fetch("api/object/string", {
                 method: "POST",
                 headers: { "Accept": "application/json", "Content-Type": "application/json" },
                 body: JSON.stringify({

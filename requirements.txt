@@ -1,4 +1,6 @@
-fastapi~=0.115.5
-pytest~=8.3.3
-requests~=2.32.3
-uvicorn~=0.32.0
+fastapi
+pytest
+requests
+uvicorn
+allure-pytest
+allure-python-commons
