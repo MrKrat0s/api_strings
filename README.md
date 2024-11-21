@@ -13,7 +13,7 @@ uvicorn main:app --host host --port port
 
 Запуск тестов:
 ```commandline
-pytest --host host --port port api_testing/test_api.py
+pytest --host host --port port test_api.py
 --host  ip адрес сервера
 --port  порт сервера
 ```
