@@ -7,6 +7,8 @@ def is_palindrome(x):
 
 
 def is_valid_uuid(uuid_to_test, version=4):
+    if not isinstance(uuid_to_test, str):
+        return False
     try:
         uuid_obj = UUID(uuid_to_test, version=version)
     except ValueError:

@@ -6,11 +6,17 @@ from elements.handlers.string_handlers import StringRequester
 from elements.schemes.string_scheme import StringScheme
 from lib.tools import is_palindrome, is_valid_uuid
 from lib.json_tools import JsonTools as json
+from lib.allure_wrapper import AllureWrapper
 
 
 @pytest.fixture(scope='class')
-def requester_string(hostname):
-    return StringRequester(hostname)
+def requester(hostname):
+    return AllureWrapper(hostname)
+
+
+@pytest.fixture(scope='class')
+def requester_string(requester):
+    return StringRequester(requester)
 
 
 @pytest.fixture
@@ -91,6 +97,7 @@ class TestStrings:
                                  123,
                                  str(uuid.uuid1()),
                                  str(uuid.uuid3(uuid.NAMESPACE_DNS, 'google.com')),
+                                 str(uuid.uuid4()),
                                  str(uuid.uuid5(uuid.NAMESPACE_URL, 'yandex.ru')),
                              ]
                              )
@@ -101,15 +108,21 @@ class TestStrings:
             response = requester_string.get_string(id=uuid)
             status_code, json_response = json.prepare_answer(response)
 
-        if uuid == "":
+        if is_valid_uuid(uuid):
+            with allure.step('ОР: status_code = 404'):
+                assert status_code == 404
+
+            with allure.step(f'ОР: ожидаемая строка: error=String not found'):
+                assert json_response == json.make_json(error='String not found')
+        elif uuid == "":
             with allure.step('ОР: status_code = 405'):
                 assert status_code == 405
 
-            with allure.step(f'ОР: ожидаемая строка: error=Not Found'):
+            with allure.step(f'ОР: ожидаемая строка: detail=Method Not Allowed'):
                 assert json_response == json.make_json(detail='Method Not Allowed')
         else:
             with allure.step('ОР: status_code = 400'):
                 assert status_code == 400
 
-            with allure.step(f'ОР: ожидаемая строка: error=Not Found'):
+            with allure.step(f'ОР: ожидаемая строка: error=Invalide UUID'):
                 assert json_response == json.make_json(error='Invalide UUID')

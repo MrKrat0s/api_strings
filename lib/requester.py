@@ -4,17 +4,11 @@ from lib.tools import create_http_session
 
 
 class RequesterAPI:
-    def __init__(self, hostname, endpoint):
+    def __init__(self, hostname):
         self.session = create_http_session()
-        self.endpoint = f"{endpoint}/"
         self.path = f"http://{hostname}/api/"
 
     def make_request(self, path, request_method, data=None):
-        if not path:
-            path = self.endpoint[:-1]
-        else:
-            path = f"{self.endpoint}{path}"
-
         try:
             result_path = f"{self.path}{path}"
             return self.session.request(

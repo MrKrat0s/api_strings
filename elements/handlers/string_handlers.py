@@ -1,27 +1,18 @@
 import allure
 
-from lib.allure_wrapper import AllureWrapper
 
-
-class StringRequester(AllureWrapper):
-    def __init__(self, hostname):
-        super().__init__(hostname, endpoint='object')
+class StringRequester:
+    def __init__(self, requester):
+        self.endpoint = 'object/'
+        self.requester = requester
 
     def get_strings(self):
         with allure.step("Получения списка строк"):
-            return self.get_request("string")
+            return self.requester.get_request(f"{self.endpoint}string")
 
     def get_string(self, id):
         with allure.step(f"Получения строки {id=}"):
-            return self.get_request(f"string/{id}")
+            return self.requester.get_request(f"{self.endpoint}string/{id}")
 
     def post_strings(self, data):
-        return self.post_request("string", data=data)
-
-    scheme_get_string = {
-        "type": "object",
-        "properties": {
-            "result": {"type": "string"},
-        },
-        "required": ["result"]
-    }
+        return self.requester.post_request(f"{self.endpoint}string", data=data)
