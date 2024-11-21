@@ -5,10 +5,15 @@ pip install requirements.txt
 
 Запуск сервера с API:
 ```commandline
-uvicorn main:app --host 0.0.0.0 --port 1234
+cd string_project
+uvicorn main:app --host host --port port
+--host  ip адрес сервера
+--port  порт сервера
 ```
 
 Запуск тестов:
 ```commandline
-pytest api_testing/test_api.py 
+pytest --host host --port port api_testing/test_api.py
+--host  ip адрес сервера
+--port  порт сервера
 ```
